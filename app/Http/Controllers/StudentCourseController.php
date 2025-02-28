@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Models\StudentCourse;
+use Illuminate\Support\Facades\DB;
 
 class StudentCourseController extends Controller
 {
@@ -53,6 +54,33 @@ class StudentCourseController extends Controller
         }
 
         return response()->json(['message' => 'Courses assigned successfully']);
+    }
+
+    public function viewStudent(Request $request)
+    {
+        $student_id = $request->input('student_id'); // Use input() method to get the student_id
+
+        // Using parameter binding to avoid SQL injection
+        $student = DB::select("
+            SELECT
+                tbl_students.first_name,
+                tbl_students.last_name,
+                tbl_students.email,
+                tbl_students.phone_number,
+                tbl_courses.course_name,
+                tbl_courses.course_code,
+                tbl_students.student_id,
+                tbl_student_courses.student_course_id,
+                tbl_courses.course_id
+            FROM
+                tbl_student_courses
+            INNER JOIN tbl_courses ON tbl_student_courses.course_id = tbl_courses.course_id
+            INNER JOIN tbl_students ON tbl_student_courses.student_id = tbl_students.student_id
+            WHERE
+                tbl_students.student_id = :student_id
+        ", ['student_id' => $student_id]);
+
+        return response()->json(['student' => $student]);
     }
 
 

@@ -28,6 +28,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 
 /////////////////////////////// DEPARTMENTS /////////////////////////////////////////////////
+Route::middleware('auth:api')->group(function () {
 
 Route::get('departments', [DepartmentController::class, 'getDepartments']);
 Route::post('addDepartment', [DepartmentController::class, 'addDepartment']);
@@ -56,3 +57,7 @@ Route::get('getCourseById/{course_id}',[CourseController::class,'getCourseById']
 //////////////////////////////////// StudentCourseAssignment /////////////////////////////////////////////////////
 
 Route::post('assignCourse', [StudentCourseController::class, 'assignCourse']);
+
+
+});
+Route::post('viewStudent', [StudentCourseController::class, 'viewStudent']);

@@ -44,6 +44,7 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'remember_token',
     ];
+    public $timestamps=FALSE;
 
     /**
      * The attributes that should be cast.
